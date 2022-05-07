@@ -9,10 +9,11 @@ typedef struct nodo{
 	char nombre[30];
 	char apellido[30];
 	struct nodo *ptrSig;
+	struct nodo *ptrAnt;
 } stcNodo;
 
 
-stcNodo *ptrInicio, *ptrRecorrido, *ptrNuevo, *ptrAnterior;
+stcNodo *ptrInicio, *ptrRecorrido, *ptrNuevo, *ptrAnterior, *ptrFinal;
 
 
 
@@ -38,9 +39,11 @@ bool CrearNodo(){
 		printf("%s","\nIngrese apellido:\n");
 		scanf("%s", &ptrNuevo->apellido);
 		ptrNuevo->ptrSig = NULL;
+		ptrNuevo->ptrAnt = NULL;
 		
 		if(ptrInicio == NULL){
 			ptrInicio = ptrNuevo;
+			ptrFinal = ptrNuevo;
 		}else{
 			seCreoNodo=true;
 		}
@@ -61,6 +64,7 @@ void CrearNodoFinal(){
 		}
 		
 		ptrRecorrido->ptrSig = ptrNuevo;
+		ptrFinal = ptrNuevo;
 	}
 
 }
@@ -107,6 +111,7 @@ void CrearNodoEnOrden(){
 			}			
 		}else{
 			ptrRecorrido->ptrSig = ptrNuevo;
+			ptrFinal = ptrNuevo;
 		}
 	}
 
@@ -152,11 +157,8 @@ void EliminarNodoEnOrden(){
 //Recorre la lista
 void Recorrido(){
 	system("cls");
-	
-	printf("%s\n","*****");
 	printf("%s\n","***** RECORRIDO DE LISTA SIMPLE *****");
 	printf("%s\n","*****");
-	printf("%s","*   ");
 
 	ptrRecorrido = ptrInicio;
 	while(ptrRecorrido != NULL){
@@ -185,7 +187,7 @@ void Busqueda(){
 
 	system("cls");
 	printf("%s\n","***** BUSQUEDA DE UN VALOR *****");
-	printf("%s","* INGRESE VALOR A BUSCAR:   ");
+	printf("%s","*** INGRESE VALOR A BUSCAR: ");
 	scanf("%d",&numBusqueda);
 	
 	ptrRecorrido = ptrInicio;
@@ -211,11 +213,18 @@ void Busqueda(){
 }
 
 
-
+void enlaceInicial(){
+	ptrInicio->ptrSig = ptrFinal;
+	ptrFinal->ptrSig = ptrInicio;
+	ptrInicio->ptrAnt = ptrFinal;
+	ptrFinal->ptrAnt = ptrInicio;	
+}
 
 int main (){
 	
 	int opcion=0;
+	enlaceInicial();
+
 	while(opcion != 7){
 		system("cls");
 		printf("%s\n","1.Ingresar (final de la lista)");
