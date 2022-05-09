@@ -5,9 +5,11 @@
 
 //Nodo que representara nuestra lista
 typedef struct nodo{
-	int codigoCliente;
+	int codigo;
 	char nombre[30];
-	char apellido[30];
+	char identificacion[15];
+	char telefono[10];
+	char direccion[45];
 	struct nodo *ptrSig;
 	struct nodo *ptrAnt;
 } stcNodo;
@@ -33,11 +35,16 @@ bool CrearNodo(){
 		//Paso 1, pedimos avlor a inicializamos punteros
 		printf("%s","***** INGRESO DE DATOS *****\n");
 		printf("%s","\nIngrese codigo de cliente:\n");
-		scanf("%d", &ptrNuevo->codigoCliente);
+		scanf("%d", &ptrNuevo->codigo);
 		printf("%s","\nIngrese nombre:\n");
 		scanf("%s", &ptrNuevo->nombre);
-		printf("%s","\nIngrese apellido:\n");
-		scanf("%s", &ptrNuevo->apellido);
+		printf("%s","\nIngrese identificacion:\n");
+		scanf("%s", &ptrNuevo->identificacion);
+		printf("%s","\nIngrese telefono:\n");
+		scanf("%s", &ptrNuevo->telefono);
+		printf("%s","\nIngrese direccion:\n");
+		scanf("%s", &ptrNuevo->direccion);
+
 		ptrNuevo->ptrSig = NULL;
 		ptrNuevo->ptrAnt = NULL;
 		
@@ -93,7 +100,7 @@ void CrearNodoEnOrden(){
 		ptrRecorrido = ptrInicio;
 		while(ptrRecorrido->ptrSig != NULL){
 
-			if(ptrNuevo->codigoCliente > ptrRecorrido->codigoCliente){
+			if(ptrNuevo->codigo > ptrRecorrido->codigo){
 				break;
 			}
 
@@ -101,17 +108,27 @@ void CrearNodoEnOrden(){
 			ptrRecorrido = ptrRecorrido->ptrSig;
 		}
 		
-		if(ptrNuevo->codigoCliente > ptrRecorrido->codigoCliente){
+		if(ptrNuevo->codigo > ptrRecorrido->codigo){
 			ptrNuevo->ptrSig = ptrRecorrido ;
 			
 			if(ptrInicio == ptrRecorrido){
 				ptrInicio = ptrNuevo;
+				//Punteros
+				ptrNuevo->ptrSig = ptrFinal;
+				ptrNuevo->ptrAnt = ptrInicio;
 			}else{
 				ptrAnterior->ptrSig = ptrNuevo;
-			}			
+				//Punteros
+				ptrNuevo->ptrSig = ptrRecorrido->ptrSig;
+				ptrNuevo->ptrAnt = ptrAnterior;				
+			}
+			
 		}else{
 			ptrRecorrido->ptrSig = ptrNuevo;
 			ptrFinal = ptrNuevo;
+			//Punteros
+			ptrFinal->ptrSig = NULL;
+			ptrFinal->ptrAnt = ptrAnterior;
 		}
 	}
 
@@ -135,7 +152,7 @@ void EliminarNodoEnOrden(){
 	ptrAnterior = ptrInicio;
 	ptrRecorrido = ptrInicio;
 	while(ptrRecorrido != NULL){
-		if(ptrRecorrido->codigoCliente == numBusqueda){
+		if(ptrRecorrido->codigo == numBusqueda){
 			ptrAnterior->ptrSig = ptrRecorrido->ptrSig;
 
 			nodoEncontrado=true;
@@ -157,15 +174,17 @@ void EliminarNodoEnOrden(){
 //Recorre la lista
 void Recorrido(){
 	system("cls");
-	printf("%s\n","***** RECORRIDO DE LISTA SIMPLE *****");
+	printf("%s\n","***** RECORRIDO DE LISTA DOBLE ENLAZADA *****");
 	printf("%s\n","*****");
 
 	ptrRecorrido = ptrInicio;
 	while(ptrRecorrido != NULL){
-		printf("(%d-%s %s)-->", 
-				ptrRecorrido->codigoCliente,
+		printf("(%d-%s %s %s %s)-->", 
+				ptrRecorrido->codigo,
 				ptrRecorrido->nombre, 
-				ptrRecorrido->apellido);
+				ptrRecorrido->identificacion,
+				ptrRecorrido->telefono,
+				ptrRecorrido->direccion);
 		ptrRecorrido = ptrRecorrido->ptrSig;	
 	}
 	
@@ -175,6 +194,85 @@ void Recorrido(){
 	getch();
 }
 
+
+
+//Recorre la lista de manera inversa
+void RecorridoInverso(){
+	system("cls");
+	printf("%s\n","***** RECORRIDO INVERSO DE LISTA DOBLE ENLAZADA *****");
+	printf("%s\n","*****");
+
+	ptrRecorrido = ptrFinal;
+	while(ptrRecorrido != NULL){
+		printf("(%d-%s %s %s %s)-->", 
+				ptrRecorrido->codigo,
+				ptrRecorrido->nombre, 
+				ptrRecorrido->identificacion,
+				ptrRecorrido->telefono,
+				ptrRecorrido->direccion);
+		ptrRecorrido = ptrRecorrido->ptrAnt;
+	}
+	
+	printf("%s\n","NIL");
+	printf("%s\n","*            *");
+	printf("%s\n","*****");
+	getch();
+}
+
+
+
+//Recorre la lista de manera inversa
+void RecorridoEspecial(){
+	system("cls");
+	printf("%s\n","***** REPORTE DE PERSONAS LISTA DOBLE ENLAZADA *****");
+	printf("%s\n","*****");
+
+	ptrRecorrido = ptrInicio;
+	printf("\t%s\t\t %s\t\t %s\t\t %s\t\t %s\n", 	
+				"codigo",
+				"nombre", 
+				"identificacion",
+				"telefono",
+				"direccion");
+	while(ptrRecorrido != NULL){
+		printf("\t%d\t\t %s\t\t %s\t\t %s\t\t %s\n", 
+				ptrRecorrido->codigo,
+				ptrRecorrido->nombre, 
+				ptrRecorrido->identificacion,
+				ptrRecorrido->telefono,
+				ptrRecorrido->direccion);
+		ptrRecorrido = ptrRecorrido->ptrSig;
+	}
+
+	printf("%s\n","*******************");
+	printf("%s\n","FIN DE LOS DATOS");
+	printf("%s\n","*******************");
+	getch();
+}
+
+
+//Recorre la lista de manera inversa
+void ReporteCantPersonas(){
+	system("cls");
+	printf("%s\n","***** RECORRIDO INVERSO DE LISTA DOBLE ENLAZADA *****");
+	printf("%s\n","*****");
+
+	ptrRecorrido = ptrFinal;
+	while(ptrRecorrido != NULL){
+		printf("(%d-%s %s)-->", 
+				ptrRecorrido->codigo,
+				ptrRecorrido->nombre, 
+				ptrRecorrido->identificacion,
+				ptrRecorrido->telefono,
+				ptrRecorrido->direccion);
+		ptrRecorrido = ptrRecorrido->ptrAnt;
+	}
+	
+	printf("%s\n","NIL");
+	printf("%s\n","*            *");
+	printf("%s\n","*****");
+	getch();
+}
 
 
 
@@ -192,12 +290,14 @@ void Busqueda(){
 	
 	ptrRecorrido = ptrInicio;
 	while(ptrRecorrido != NULL){
-		if(ptrRecorrido->codigoCliente == numBusqueda){
+		if(ptrRecorrido->codigo == numBusqueda){
 			printf("* (%d-%s %s)--> [Valor encontrado]\n", 
-					ptrRecorrido->codigoCliente,
+					ptrRecorrido->codigo,
 					ptrRecorrido->nombre, 
-					ptrRecorrido->apellido);
-			//printf("%s%d%s\n","* ",ptrRecorrido->codigoCliente, "-->");
+					ptrRecorrido->identificacion,
+					ptrRecorrido->telefono,
+					ptrRecorrido->direccion);
+			//printf("%s%d%s\n","* ",ptrRecorrido->codigo, "-->");
 			numEncontrado++;
 		}
 		ptrRecorrido = ptrRecorrido->ptrSig;
@@ -214,10 +314,14 @@ void Busqueda(){
 
 
 void enlaceInicial(){
-	ptrInicio->ptrSig = ptrFinal;
-	ptrFinal->ptrSig = ptrInicio;
-	ptrInicio->ptrAnt = ptrFinal;
-	ptrFinal->ptrAnt = ptrInicio;	
+	if(ptrInicio != NULL){
+		ptrInicio->ptrSig = ptrFinal;
+		ptrInicio->ptrAnt = ptrFinal;
+	}
+	if(ptrFinal != NULL){
+		ptrFinal->ptrSig = ptrInicio;
+		ptrFinal->ptrAnt = ptrInicio;
+	}
 }
 
 int main (){
@@ -225,47 +329,50 @@ int main (){
 	int opcion=0;
 	enlaceInicial();
 
-	while(opcion != 7){
+	while(opcion != 8){
 		system("cls");
-		printf("%s\n","1.Ingresar (final de la lista)");
-		printf("%s\n","2.Ingresar (inicio de la lista)");
-		printf("%s\n","3.Mostrar");
-		printf("%s\n","4.Buscar");
-		printf("%s\n","5.Ingresar en orden DESCENDENTE");
-		printf("%s\n","6.Eliminar");
-		printf("%s\n","7.Salir");
+		printf("%s\n","1.Ingresar");
+		printf("%s\n","2.Buscar");
+		printf("%s\n","3.Eliminar");
+		printf("%s\n","4.Listado");
+		printf("%s\n","5.Listado inverso");
+		printf("%s\n","6.Reporte de personas");
+		printf("%s\n","7.Cantidad de personas");
+		printf("%s\n","8.Salir");
 		printf("%s\n","Seleccione una opcion");
 		scanf("%d", &opcion);
 		
 		switch(opcion){
 			case 1:
-				CrearNodoFinal();
+				CrearNodoEnOrden();
 				break;
 			case 2:
-				CrearNodoInicio();
-				break;
-			case 3:
-				Recorrido();
-				break;
-			case 4:
 				Busqueda();
 				break;
+			case 3:
+				EliminarNodoEnOrden();
+				break;
+			case 4:
+				Recorrido();
+				break;
 			case 5:
-				CrearNodoEnOrden();
+				RecorridoInverso();
 				break;				
 			case 6:
-				EliminarNodoEnOrden();
+				RecorridoEspecial();
 				break;								
 			case 7:
+				ReporteCantPersonas();
+				break;												
+			case 8:
 				break;								
 
 			default:
-				printf("%s\n","5.Salir");	
+				printf("%s\n","8.Salir");	
 				getch();
 				opcion=0;
 				break;													
 		}
-		
 	}
 	
 	return 0;
